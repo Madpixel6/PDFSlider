@@ -1,0 +1,17 @@
+﻿<Window x:Class="PDFSlider.MainWindow"
+        x:Name="MainWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:c="clr-namespace:PDFSlider.Controls"
+        xmlns:l="clr-namespace:PDFSlider.ViewModels"
+        mc:Ignorable="d"
+        Title="SlajderPDF" Height="600" Width="800" WindowState="Maximized" WindowStyle="None">
+    <Window.DataContext>
+        <l:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <c:PdfViewer PdfPath="{Binding CurrPdfPath , Mode=OneWay}"/>
+    </Grid>
+</Window>

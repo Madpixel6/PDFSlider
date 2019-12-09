@@ -1,0 +1,4 @@
+﻿/.vs/*
+/PDFSlider/bin
+/PDFSlider/obj
+/PDFSlider/Resources/*.png

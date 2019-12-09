@@ -1,0 +1,36 @@
+﻿<Window x:Class="PDFSlider.View.OptionsWindow"
+        x:Name="OptionsWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="clr-namespace:PDFSlider.ViewModels"
+        mc:Ignorable="d"
+        Title="Wybierz katalog z plikami .PDF" Height="420" Width="560" ResizeMode="NoResize">
+    <Window.DataContext>
+        <l:OptionsWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.2*" />
+        </Grid.RowDefinitions>
+        <Image Grid.Column="2" HorizontalAlignment="Left" Height="78" VerticalAlignment="Top" Width="138" Source="/PDFSlider;component/Resources/JSWITS.png" RenderTransformOrigin="0.66,0.772"/>
+        <Image Grid.Column="0" HorizontalAlignment="Left" Height="78" VerticalAlignment="Top" Width="138" Source="/PDFSlider;component/Resources/JSW.png"/>
+        <Label Grid.Column="1" Grid.Row="2" Content="Ścieżka katalogu z plikami .PDF:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Height="20" Text="{Binding PdfDirectoryPath, Mode=TwoWay}" TextWrapping="Wrap" VerticalAlignment="Top" Width="208" Margin="2,20,0,0"/>
+        <Button Grid.Column="1" Grid.Row="2" Content="Wybierz" Command="{Binding ChooseDirCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="62" Margin="0,20,0,0" />
+        <Label Grid.Column="1" Grid.Row="2" Content="Czas wyświetlania slajdu:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Height="20" Text="{Binding SecondsBetweenSlides, Mode=TwoWay}" VerticalAlignment="Center" Width="208" Margin="2,63,0,23"/>
+        <Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" Content="OK" Command="{Binding OKCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=OptionsWnd}" VerticalAlignment="Center" Width="75" Background="#FF919191"/>
+
+    </Grid>
+</Window>
