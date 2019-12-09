@@ -1,0 +1,4 @@
+﻿language: csharp
+solution: PDFSlider.sln
+script:
+ - msbuild /p:Configuration=Release
