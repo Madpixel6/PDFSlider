@@ -11,6 +11,9 @@
     <Window.DataContext>
         <l:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding ESCCommand, Mode=OneWay}"></KeyBinding>
+    </Window.InputBindings>
     <Grid>
         <c:PdfViewer PdfPath="{Binding CurrPdfPath , Mode=OneWay}"/>
     </Grid>

@@ -1,10 +1,12 @@
 ﻿using PDFSlider.Services;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PDFSlider.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        public ICommand ESCCommand { get; private set; }
         #region Fields, Properties
         public string currPdfPath;
         public string CurrPdfPath
@@ -23,11 +25,17 @@ namespace PDFSlider.ViewModels
         private readonly IPdfService pdfService;
         public MainWindowViewModel()
         {
+            InitCommands();
+
             pdfService = new PdfService();
             pdfService.Run();
 
             SwitchPDFsTask = SwitchPDFs();
 
+        }
+        private void InitCommands()
+        {
+            ESCCommand = new RelayCommand(obj => ExitProgram(), _ => true);
         }
         private async Task SwitchPDFs()
         {
@@ -36,6 +44,10 @@ namespace PDFSlider.ViewModels
                 CurrPdfPath = pdfService.CurrentPdfPath;
                 await Task.Delay(1000);
             }
+        }
+        private void ExitProgram()
+        {
+            System.Environment.Exit(0);
         }
     }
 }

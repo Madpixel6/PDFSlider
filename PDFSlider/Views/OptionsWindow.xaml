@@ -27,10 +27,10 @@
         <Image Grid.Column="0" HorizontalAlignment="Left" Height="78" VerticalAlignment="Top" Width="138" Source="/PDFSlider;component/Resources/JSW.png"/>
         <Label Grid.Column="1" Grid.Row="2" Content="Ścieżka katalogu z plikami .PDF:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Height="20" Text="{Binding PdfDirectoryPath, Mode=TwoWay}" TextWrapping="Wrap" VerticalAlignment="Top" Width="208" Margin="2,20,0,0"/>
-        <Button Grid.Column="1" Grid.Row="2" Content="Wybierz" Command="{Binding ChooseDirCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="62" Margin="0,20,0,0" />
+        <Button Grid.Column="1" Grid.Row="2" Content="Wybierz" Command="{Binding ChooseDirCommand, Mode=OneTime}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="62" Margin="0,20,0,0" />
         <Label Grid.Column="1" Grid.Row="2" Content="Czas wyświetlania slajdu:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Height="20" Text="{Binding SecondsBetweenSlides, Mode=TwoWay}" VerticalAlignment="Center" Width="208" Margin="2,63,0,23"/>
-        <Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" Content="OK" Command="{Binding OKCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=OptionsWnd}" VerticalAlignment="Center" Width="75" Background="#FF919191"/>
+        <Button Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch" Content="OK" Command="{Binding OKCommand, Mode=OneTime}" CommandParameter="{Binding ElementName=OptionsWnd}" VerticalAlignment="Center" Width="75" Background="#FF919191"/>
 
     </Grid>
 </Window>

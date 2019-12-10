@@ -6,7 +6,7 @@ namespace PDFSlider.Services
 {
     public class PdfService : IPdfService
     {
-        private Task sliderTask;
+        private Task readUpdateTask;
 
         public string CurrentPdfPath { get; set; }
         private int SecondsBetweenSlides { get; set; } = 0;
@@ -27,25 +27,13 @@ namespace PDFSlider.Services
             {
                 FilePaths = Directory.GetFiles(DirPath, "*.pdf");
             }
-            //string localPath;
-            //var assemblyNameLen = System.Reflection.Assembly.GetExecutingAssembly()?.ManifestModule.Name.Length;
-            //if (assemblyNameLen.HasValue)
-            //{
-            //    var assemblyLocation = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            //    localPath = assemblyLocation.Substring(0, assemblyLocation.Length - (assemblyNameLen.Value + 1));
-
-
-            //   // filePaths = Directory.GetFiles(localPath, "*.pdf");
-            //   // PdfPath = "Resources/testPDF.pdf";
-            //    return true; // success
-            //}
         }
 
         public void Run()
         {
-            if (sliderTask is null)
+            if (readUpdateTask is null)
             {
-                var tsk = ReadAndUpdate();
+                readUpdateTask = ReadAndUpdate();
             }
             else
                 throw new Exception("Slider task is already running!");
