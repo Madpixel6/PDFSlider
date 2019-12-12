@@ -33,7 +33,7 @@ namespace PDFSlider.Controls
             if (!string.IsNullOrEmpty(pdfDrawer.PdfPath))
             {
                 //making sure it's an absolute path
-                var path = System.IO.Path.GetFullPath(pdfDrawer.PdfPath);
+                var path = Path.GetFullPath(pdfDrawer.PdfPath);
 
                 StorageFile.GetFileFromPathAsync(path).AsTask()
                   //load pdf document on background thread

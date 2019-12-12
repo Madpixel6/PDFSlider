@@ -14,13 +14,6 @@ namespace PDFSlider.Services
 
         private string[] FilePaths { get; set; }
 
-
-        public PdfService()
-        {
-            SecondsBetweenSlides = CfgService.ReadPropertyParseInt("secondsBetweenSlides");
-            DirPath = CfgService.ReadProperty("selectedDirPath");
-        }
-
         private void ReadFilesInDirectory()
         {
             if (!string.IsNullOrEmpty(DirPath))
@@ -31,6 +24,9 @@ namespace PDFSlider.Services
 
         public void Run()
         {
+            SecondsBetweenSlides = CfgService.ReadPropertyParseInt("secondsBetweenSlides");
+            DirPath = CfgService.ReadProperty("selectedDirPath");
+
             if (readUpdateTask is null)
             {
                 readUpdateTask = ReadAndUpdate();
@@ -46,7 +42,10 @@ namespace PDFSlider.Services
             {
                 foreach (var item in FilePaths)
                 {
-                    CurrentPdfPath = item;
+                    if (!File.Exists(item))
+                        ReadFilesInDirectory();
+                    else
+                        CurrentPdfPath = item;
                     await Task.Delay(SecondsBetweenSlides * 1000);
                 }
 

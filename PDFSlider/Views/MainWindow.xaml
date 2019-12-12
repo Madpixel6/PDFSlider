@@ -12,7 +12,7 @@
         <l:MainWindowViewModel/>
     </Window.DataContext>
     <Window.InputBindings>
-        <KeyBinding Key="Esc" Command="{Binding ESCCommand, Mode=OneWay}"></KeyBinding>
+        <KeyBinding Key="Esc" Command="{Binding ESCCommand, Mode=OneTime}"></KeyBinding>
     </Window.InputBindings>
     <Grid>
         <c:PdfViewer PdfPath="{Binding CurrPdfPath , Mode=OneWay}"/>
