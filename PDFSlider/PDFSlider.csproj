@@ -91,8 +91,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\JSW.png" />
-    <Resource Include="Resources\JSWITS.png" />
     <Content Include="Resources\PolishLang.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
