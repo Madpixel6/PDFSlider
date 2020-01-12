@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
+using NLog;
 using PDFSlider.Services.Abstract;
 using PDFSlider.ViewModels.Abstract;
 using System;
@@ -11,6 +12,8 @@ namespace PDFSlider
     {
         private static IContainer Container { get; set; }
         private static ContainerBuilder builder;
+
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public static void Build()
         {
@@ -33,7 +36,7 @@ namespace PDFSlider
         {
             if (Container is null)
             {
-                throw new Exception("Bootstrap container is empty");
+                Logger.Fatal(new InvalidOperationException(), "Bootstrap container is empty");
             }
 
             return Container.Resolve<T>(new Parameter[0]);
@@ -43,7 +46,7 @@ namespace PDFSlider
         {
             if (Container is null)
             {
-                throw new Exception("Bootstrap container is empty");
+                Logger.Fatal(new InvalidOperationException(), "Bootstrap container is empty");
             }
 
             return Container.Resolve<T>(parameters);
