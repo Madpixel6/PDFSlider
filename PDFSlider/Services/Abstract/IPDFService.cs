@@ -1,6 +1,8 @@
-﻿namespace PDFSlider.Services
+﻿using PDFSlider.Services.Abstract;
+
+namespace PDFSlider.Services
 {
-    interface IPdfService
+    public interface IPdfService : IService
     {
         string CurrentPdfPath { get; set; }
         void Run();

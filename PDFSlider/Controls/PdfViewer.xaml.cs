@@ -18,11 +18,13 @@ namespace PDFSlider.Controls
 
         public string PdfPath
         {
-            get { return (string)GetValue(PdfPathProperty); }
-            set { SetValue(PdfPathProperty, value); }
+            get 
+            { 
+                return (string)GetValue(PdfPathProperty); 
+            }
+            set => SetValue(PdfPathProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for PdfPath.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PdfPathProperty =
             DependencyProperty.Register("PdfPath", typeof(string), typeof(PdfViewer), new PropertyMetadata(null, propertyChangedCallback: OnPdfPathChanged));
 

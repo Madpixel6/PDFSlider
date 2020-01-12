@@ -1,51 +1,56 @@
-﻿using PDFSlider.Services;
+﻿using NLog;
+using PDFSlider.Services;
 using PDFSlider.View;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace PDFSlider
 {
     public partial class App : Application
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         public void AppStart(object sender, StartupEventArgs args)
         {
-            Localize();
+            Bootstrap.Build();
             if (CfgService.ReadPropertyParseBool("showCfgWndOnStartup"))
             {
-                var optionsWindow = new OptionsWindow();
+                Window optionsWindow = new OptionsWindow();
                 optionsWindow?.ShowDialog();
             }
             else
             {
-                var mainWindow = new MainWindow();
+                Window mainWindow = new MainWindow();
                 mainWindow?.Show();
             }
 
         }
-        private void Localize()
+        protected override void OnStartup(StartupEventArgs e)
         {
-           // List<ResourceDictionary> resourceDictionaries = LoadLangComponents();
+            // add handlers for unhandled exceptions
+            AppDomain.CurrentDomain.UnhandledException += DomainExceptionHandler;
+            Current.DispatcherUnhandledException += DispatcherExceptionHandler;
+
+            base.OnStartup(e);
         }
-        // Returns a list of language components
-        private List<ResourceDictionary> LoadLangComponents()
+        #region Exception handlers
+        private void DomainExceptionHandler(object sender, UnhandledExceptionEventArgs args)
         {
-            var langObjects = new List<ResourceDictionary>();
-            var langFiles = Directory.GetFiles("Resources/","*Lang.xaml");
-            if(langFiles.Length > 0)
-            {
-                var uriPaths = new List<Uri>();
-                for (var i = 0; i < langFiles.Length; i++)
-                {
-                    var uriObj = new Uri(langFiles[i], UriKind.Relative);
-                    uriPaths.Add(uriObj);
-                }
-                foreach (var item in uriPaths)
-                    langObjects.Add((ResourceDictionary)LoadComponent(item));
-            }
-            return langObjects;
+            Logger.Info("App domain exception occured");
+            HandleInternalException(args.ExceptionObject as Exception);
         }
+
+        private void DispatcherExceptionHandler(object sender, DispatcherUnhandledExceptionEventArgs args)
+        {
+            args.Handled = true;
+            Logger.Info("Dispatcher thread exception occured");
+            HandleInternalException(args.Exception);
+        }
+
+        private void HandleInternalException(Exception ex)
+        {
+            Logger.Error(ex);
+        }
+        #endregion
     }
 }
