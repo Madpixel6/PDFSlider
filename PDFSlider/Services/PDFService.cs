@@ -1,57 +1,85 @@
-﻿using System;
+﻿using NLog;
+using PDFSlider.CustomExceptions;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace PDFSlider.Services
 {
-    public class PdfService : IPdfService
+    public class PdfService : IPdfService, IDisposable
     {
-        private Task readUpdateTask;
+        #region Instances, Fields
+        private ThreadStart ReadAndUpdateThreadStart = null;
+        private Thread ReadAndUpdateThread = null;
 
         public string CurrentPdfPath { get; set; }
         private int SecondsBetweenSlides { get; set; } = 0;
         private string DirPath { get; set; }
+        #endregion
 
-        private string[] FilePaths { get; set; }
-
+        private readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public PdfService()
         {
-            SecondsBetweenSlides = CfgService.ReadPropertyParseInt("secondsBetweenSlides");
-            DirPath = CfgService.ReadProperty("selectedDirPath");
+            ReadAndUpdateThreadStart = new ThreadStart(() => ReadAndUpdate());
+            ReadAndUpdateThread = new Thread(ReadAndUpdateThreadStart);
         }
 
-        private void ReadFilesInDirectory()
+        private void ReadFilesInDirectory(ref List<string> filePaths)
         {
+            if(filePaths.Count > 0)
+                filePaths.Clear();
             if (!string.IsNullOrEmpty(DirPath))
             {
-                FilePaths = Directory.GetFiles(DirPath, "*.pdf");
+                try
+                {
+                    filePaths.AddRange(Directory.GetFiles(DirPath, "*.pdf"));
+                    if (filePaths.Count < 1)
+                        Logger.Error(new FileNotFoundException(), "No files with .pdf extension found in provided directory!");
+                }
+                catch(DirectoryNotFoundException ex)
+                {
+                    Logger.Error(ex, "Directory not found or path is invalid!");
+                }
             }
+            else
+                Logger.Error(new InvalidDataException(), "Directory path is invalid!");
         }
 
         public void Run()
         {
-            if (readUpdateTask is null)
+            SecondsBetweenSlides = CfgService.ReadPropertyParseInt("secondsBetweenSlides");
+            DirPath = CfgService.ReadProperty("selectedDirPath");
+
+            if (!ReadAndUpdateThread.IsAlive)
             {
-                readUpdateTask = ReadAndUpdate();
+                ReadAndUpdateThread.Start();
             }
             else
-                throw new Exception("Slider task is already running!");
+                Logger.Error(new AlreadyRunningException(), "ReadAndUpdate thread is already running!");
         }
 
-        private async Task ReadAndUpdate()
+        private void ReadAndUpdate()
         {
-            ReadFilesInDirectory();
+            var filePaths = new List<string>();
+            ReadFilesInDirectory(ref filePaths);
             while (true)
             {
-                foreach (var item in FilePaths)
+                foreach (var item in filePaths)
                 {
-                    CurrentPdfPath = item;
-                    await Task.Delay(SecondsBetweenSlides * 1000);
+                    if (!File.Exists(item))
+                        ReadFilesInDirectory(ref filePaths);
+                    else
+                        CurrentPdfPath = item;
+                    Thread.Sleep(SecondsBetweenSlides * 1000);
                 }
-
-
             }
+        }
+
+        public void Dispose()
+        {
+            ReadAndUpdateThread.Abort();
         }
     }
 }

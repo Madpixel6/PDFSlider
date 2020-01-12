@@ -1,4 +1,5 @@
 ﻿using PDFSlider.Services;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -6,6 +7,8 @@ namespace PDFSlider.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+
+        private readonly IPdfService _pdfService;
         public ICommand ESCCommand { get; private set; }
         #region Fields, Properties
         public string currPdfPath;
@@ -22,13 +25,12 @@ namespace PDFSlider.ViewModels
 
         private Task SwitchPDFsTask { get; }
         #endregion
-        private readonly IPdfService pdfService;
         public MainWindowViewModel()
         {
+            _pdfService = Bootstrap.Resolve<IPdfService>();
             InitCommands();
 
-            pdfService = new PdfService();
-            pdfService.Run();
+            _pdfService.Run();
 
             SwitchPDFsTask = SwitchPDFs();
 
@@ -41,13 +43,13 @@ namespace PDFSlider.ViewModels
         {
             while (true)
             {
-                CurrPdfPath = pdfService.CurrentPdfPath;
+                CurrPdfPath = _pdfService.CurrentPdfPath;
                 await Task.Delay(1000);
             }
         }
         private void ExitProgram()
         {
-            System.Environment.Exit(0);
+            Environment.Exit(0);
         }
     }
 }

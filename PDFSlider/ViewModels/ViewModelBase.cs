@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using PDFSlider.ViewModels.Abstract;
+using System.ComponentModel;
 
 namespace PDFSlider.ViewModels
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : IViewModel
     {
 
         #region INotifyPropertyChanged implementation

@@ -14,15 +14,30 @@ namespace PDFSlider.ViewModels
         #endregion
         #region Fields
         public bool IsCtrlEnabled { get; set; } = true;
-        public int SecondsBetweenSlides { get; set; }
+        public int secondsBetweenSlides;
+        public int SecondsBetweenSlides
+        {
+            get => secondsBetweenSlides;
+            set
+            {
+                if(secondsBetweenSlides != value)
+                {
+                    secondsBetweenSlides = value;
+                    OnPropertyChanged(nameof(SecondsBetweenSlides));
+                }
+            }
+        }
         private string pdfDirectoryPath;
         public string PdfDirectoryPath
         {
             get => pdfDirectoryPath;
             set
             {
-                pdfDirectoryPath = value;
-                OnPropertyChanged("PdfDirectoryPath");
+                if(pdfDirectoryPath != value)
+                {
+                    pdfDirectoryPath = value;
+                    OnPropertyChanged(nameof(PdfDirectoryPath));
+                }
             }
 
         }
@@ -44,19 +59,24 @@ namespace PDFSlider.ViewModels
 
         private void InitCommands()
         {
-            OKCommand = new RelayCommand(wndObj => OK_CloseCurrentOpenMain(wndObj), _ => true);
-            ChooseDirCommand = new RelayCommand(obj => ChooseDir_Method(), o => true);
+            OKCommand = new RelayCommand(OK_CloseCurrentOpenMain, _ => true);
+            ChooseDirCommand = new RelayCommand(_ => ChooseDir_Method(), _ => true);
         }
 
 
         #region Command methods
         private void OK_CloseCurrentOpenMain(object wnd)
         {
-            CfgService.SaveProperty("selectedDirPath", PdfDirectoryPath);
+            if (IsDirPathValid())
+            {
+                CfgService.SaveProperty("selectedDirPath", PdfDirectoryPath);
 
-            ViewService.ShowWindow<MainWindow>();
-            if (wnd != null && wnd is Window)
-                ViewService.CloseWindow<Window>((Window)wnd);
+                ViewService.ShowWindow<MainWindow>();
+                if (wnd != null && wnd is Window)
+                    ViewService.CloseWindow((Window)wnd);
+            }
+            else
+                throw new Exception("Provided directory path is invalid!"); // TODO: localize, add custom exceptions
         }
         private void ChooseDir_Method()
         {
@@ -70,5 +90,12 @@ namespace PDFSlider.ViewModels
             }
         }
         #endregion
+
+        private bool IsDirPathValid()
+        {
+            if(string.IsNullOrEmpty(PdfDirectoryPath))
+                return false;
+            return true;
+        }
     }
 }
