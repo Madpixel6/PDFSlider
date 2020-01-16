@@ -32,24 +32,17 @@ namespace PDFSlider
 
             Container = builder.Build();
         }
-        public static T Resolve<T>()
+
+        public static T Resolve<T>(Parameter[] parameters = null)
         {
             if (Container is null)
             {
                 Logger.Fatal(new InvalidOperationException(), "Bootstrap container is empty");
             }
-
-            return Container.Resolve<T>(new Parameter[0]);
-        }
-
-        public static T Resolve<T>(Parameter[] parameters)
-        {
-            if (Container is null)
-            {
-                Logger.Fatal(new InvalidOperationException(), "Bootstrap container is empty");
-            }
-
-            return Container.Resolve<T>(parameters);
+            if(parameters is null)
+                return Container.Resolve<T>(new Parameter[0]);
+            else
+                return Container.Resolve<T>(parameters);
         }
 
         public static void Dispose()

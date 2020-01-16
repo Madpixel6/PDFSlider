@@ -1,10 +1,11 @@
 ﻿using PDFSlider.Services.Abstract;
+using System.Collections.Generic;
 
 namespace PDFSlider.Services
 {
     public interface IPdfService : IService
     {
-        string CurrentPdfPath { get; set; }
-        void Run();
+        Queue<string> GetFilesQueue();
+        void Initialize();
     }
 }
