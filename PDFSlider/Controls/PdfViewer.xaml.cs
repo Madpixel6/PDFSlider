@@ -18,10 +18,7 @@ namespace PDFSlider.Controls
 
         public string PdfPath
         {
-            get 
-            { 
-                return (string)GetValue(PdfPathProperty); 
-            }
+            get => (string)GetValue(PdfPathProperty); 
             set => SetValue(PdfPathProperty, value);
         }
 
