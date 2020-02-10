@@ -67,11 +67,16 @@ namespace PDFSlider.ViewModels
             while (true)
             {
                 var pdfPathsQueue = _pdfService.GetFilesQueue();
-                foreach(var item in pdfPathsQueue)
+                if (pdfPathsQueue.Count > 0)
                 {
-                    CurrPdfPath = item;
-                    Thread.Sleep(SecondsBetweenSlides * 1000);
+                    foreach (var item in pdfPathsQueue)
+                    {
+                        CurrPdfPath = item;
+                        Thread.Sleep(SecondsBetweenSlides * 1000);
+                    }
                 }
+                else
+                    Thread.Sleep(5000);
             }
         }
         private void ExitProgram()
